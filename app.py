@@ -3,6 +3,7 @@
 EduBridge AI
 An AI-powered learning assistant for Nigerian students.
 """
+import time 
 
 import streamlit as st
 
