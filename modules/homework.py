@@ -81,15 +81,15 @@ def get_homework_response(question, subject, level):
     except KeyError:
         return (
             "Gemini API key is missing. "
-            "Please configure GEMINI_API_KEY in Streamlit Secrets."
+            "Check Streamlit Secrets."
         )
 
     except Exception as error:
-    st.error(
-        f"Gemini connection error: {type(error).__name__}: {error}"
-    )
+        st.error(
+            f"Gemini Error: {type(error).__name__}: {error}"
+        )
 
-    return (
-        "EduBridge AI could not generate an answer. "
-        "Please check the error displayed above."
-    )
+        return (
+            "AI tutor connection failed. "
+            "Check the error displayed above."
+        )
