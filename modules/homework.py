@@ -67,11 +67,11 @@ def get_homework_response(question, subject, level):
             question,
             level
         )
-
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
+response = client.models.generate_content(
+    model="gemini-3.8-flash",
+    contents=prompt
+)
+        
 
         if not response.text:
             return "The AI could not generate an answer. Please try again."
