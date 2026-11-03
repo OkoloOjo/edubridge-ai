@@ -1,7 +1,7 @@
 
 """
 EduBridge AI
-A student learning assistant for Nigerian students.
+An AI-powered learning assistant for Nigerian students.
 """
 
 import streamlit as st
@@ -30,9 +30,9 @@ from modules.planner import (
 )
 
 
-# -----------------------------
+# --------------------------------
 # PAGE CONFIGURATION
-# -----------------------------
+# --------------------------------
 
 st.set_page_config(
     page_title="EduBridge AI",
@@ -41,9 +41,9 @@ st.set_page_config(
 )
 
 
-# -----------------------------
+# --------------------------------
 # SESSION STATE
-# -----------------------------
+# --------------------------------
 
 if "tasks" not in st.session_state:
     st.session_state.tasks = []
@@ -52,9 +52,22 @@ if "exam_results" not in st.session_state:
     st.session_state.exam_results = []
 
 
-# -----------------------------
+# --------------------------------
+# APPLICATION HEADER
+# --------------------------------
+
+st.title("📚 EduBridge AI")
+
+st.subheader("Your Smart Learning Assistant")
+
+st.write(
+    "Learn better. Prepare smarter. Succeed together."
+)
+
+
+# --------------------------------
 # SIDEBAR NAVIGATION
-# -----------------------------
+# --------------------------------
 
 st.sidebar.title("📚 EduBridge AI")
 
@@ -62,11 +75,11 @@ st.sidebar.write(
     "Your learning companion."
 )
 
-page = st.sidebar.radio(
-    "Choose a section",
+menu = st.sidebar.selectbox(
+    "Choose a learning feature",
     [
         "Home",
-        "Homework Assistant",
+        "AI Homework Assistant",
         "Exam Preparation",
         "Multilingual Learning",
         "Study Planner"
@@ -74,30 +87,34 @@ page = st.sidebar.radio(
 )
 
 
-# -----------------------------
+# --------------------------------
 # HOME PAGE
-# -----------------------------
+# --------------------------------
 
-if page == "Home":
+if menu == "Home":
 
-    st.title("Welcome to EduBridge AI 🇳🇬")
+    st.header("Welcome to EduBridge AI 🇳🇬")
 
     st.write(
-        "Learn smarter, prepare for examinations "
+        "Your personal AI-powered education platform."
+    )
+
+    st.info(
+        "Get homework help, prepare for examinations "
         "and organise your studies."
     )
 
-    st.subheader("What you can do")
+    st.subheader("What can you do here?")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.info("📖 Get help understanding homework.")
-        st.info("📝 Practise examination questions.")
+        st.success("📖 Get AI-powered homework explanations")
+        st.success("📝 Practise examination questions")
 
     with col2:
-        st.info("🌍 Prepare learning content for translation.")
-        st.info("📅 Organise your study activities.")
+        st.success("🌍 Explore multilingual learning")
+        st.success("📅 Organise your study activities")
 
     st.subheader("Your Study Overview")
 
@@ -123,16 +140,17 @@ if page == "Home":
     )
 
 
-# -----------------------------
-# HOMEWORK ASSISTANT
-# -----------------------------
+# --------------------------------
+# AI HOMEWORK ASSISTANT
+# --------------------------------
 
-elif page == "Homework Assistant":
+elif menu == "AI Homework Assistant":
 
-    st.title("📖 Homework Assistant")
+    st.header("📖 AI Homework Assistant")
 
     st.write(
-        "Enter a question you need help understanding."
+        "Ask questions and receive step-by-step "
+        "explanations from your AI tutor."
     )
 
     subject = st.selectbox(
@@ -143,6 +161,8 @@ elif page == "Homework Assistant":
             "Physics",
             "Chemistry",
             "Biology",
+            "Agricultural Science",
+            "Computer Studies",
             "Other"
         ]
     )
@@ -150,58 +170,59 @@ elif page == "Homework Assistant":
     level = st.selectbox(
         "Your education level",
         [
+            "Primary School",
             "Junior Secondary School",
             "Senior Secondary School",
             "WAEC / NECO",
-            "JAMB"
+            "JAMB",
+            "University"
         ]
     )
 
     question = st.text_area(
-        "Enter your homework question"
+        "Enter your homework question",
+        placeholder="Example: Explain photosynthesis.",
+        height=150
     )
 
-    if st.button("Prepare Homework Help"):
+    if st.button(
+        "Ask EduBridge AI",
+        type="primary"
+    ):
 
         if not validate_question(question):
 
             st.warning(
-                "Please enter a question first."
+                "Please enter a homework question."
             )
 
         else:
 
-            response = get_homework_response(
-                question,
-                subject,
-                level
-            )
+            with st.spinner(
+                "EduBridge AI is thinking..."
+            ):
 
-            st.success(
-                "Your question has been prepared."
-            )
+                response = get_homework_response(
+                    question,
+                    subject,
+                    level
+                )
 
-            st.info(
-                "The AI tutor connection is the next development stage. "
-                "This version prepares the instructions but does not "
-                "generate an AI answer yet."
-            )
+            st.subheader("🤖 Your AI Tutor's Response")
 
-            with st.expander("View prepared AI instructions"):
-
-                st.text(response)
+            st.markdown(response)
 
 
-# -----------------------------
+# --------------------------------
 # EXAM PREPARATION
-# -----------------------------
+# --------------------------------
 
-elif page == "Exam Preparation":
+elif menu == "Exam Preparation":
 
-    st.title("📝 Examination Preparation")
+    st.header("📝 Examination Preparation")
 
     st.write(
-        "Practise questions to improve your examination performance."
+        "Practise questions to improve your performance."
     )
 
     exam = st.selectbox(
@@ -259,9 +280,7 @@ elif page == "Exam Preparation":
                 f"{score}%"
             )
 
-            st.write(
-                get_feedback(score)
-            )
+            st.write(get_feedback(score))
 
             for index, question in enumerate(questions):
 
@@ -285,21 +304,20 @@ elif page == "Exam Preparation":
     else:
 
         st.warning(
-            "Practice questions for this subject "
-            "are not available yet."
+            "Practice questions are not available yet."
         )
 
 
-# -----------------------------
+# --------------------------------
 # MULTILINGUAL LEARNING
-# -----------------------------
+# --------------------------------
 
-elif page == "Multilingual Learning":
+elif menu == "Multilingual Learning":
 
-    st.title("🌍 Multilingual Learning")
+    st.header("🌍 Multilingual Learning")
 
     st.write(
-        "Prepare educational content in a language "
+        "Explore educational content in languages "
         "you understand."
     )
 
@@ -332,8 +350,7 @@ elif page == "Multilingual Learning":
             )
 
             st.info(
-                "Actual AI translation will be connected "
-                "in the next development stage."
+                "Actual AI translation is a future integration."
             )
 
             with st.expander("View translation instructions"):
@@ -341,13 +358,13 @@ elif page == "Multilingual Learning":
                 st.text(result)
 
 
-# -----------------------------
+# --------------------------------
 # STUDY PLANNER
-# -----------------------------
+# --------------------------------
 
-elif page == "Study Planner":
+elif menu == "Study Planner":
 
-    st.title("📅 My Study Planner")
+    st.header("📅 My Study Planner")
 
     st.write(
         "Create study tasks and monitor your progress."
@@ -355,17 +372,13 @@ elif page == "Study Planner":
 
     with st.form("study_task_form"):
 
-        subject = st.text_input(
-            "Subject"
-        )
+        subject = st.text_input("Subject")
 
         topic = st.text_input(
             "What do you want to study?"
         )
 
-        study_date = st.date_input(
-            "Study date"
-        )
+        study_date = st.date_input("Study date")
 
         add_task = st.form_submit_button(
             "Add Study Task"
@@ -402,9 +415,7 @@ elif page == "Study Planner":
 
     if not st.session_state.tasks:
 
-        st.info(
-            "You have no study tasks yet."
-        )
+        st.info("You have no study tasks yet.")
 
     else:
 
@@ -412,9 +423,7 @@ elif page == "Study Planner":
             st.session_state.tasks
         ):
 
-            col1, col2, col3 = st.columns(
-                [3, 2, 1]
-            )
+            col1, col2, col3 = st.columns([3, 2, 1])
 
             with col1:
 
@@ -492,9 +501,9 @@ elif page == "Study Planner":
     )
 
 
-# -----------------------------
+# --------------------------------
 # FOOTER
-# -----------------------------
+# --------------------------------
 
 st.sidebar.divider()
 
